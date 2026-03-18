@@ -309,7 +309,7 @@ io.on("connection", (socket) => {
         party = parties[inviter];
         broadcastParty(party);
     }
-    console.log(test)
+    console.log('test')
     if (party.members.length >= 5) return;
     if (getUserParty(targetUsername)) return;
     const targetSocketId = userSockets[targetUsername];
