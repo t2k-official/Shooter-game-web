@@ -296,7 +296,9 @@ io.on("connection", (socket) => {
   // INVITE TO PARTY
   // =========================
   socket.on("inviteToParty", (targetUsername) => {
+    console.log('test1')
     const inviter = socket.username;
+    console.log(inviter)
     if (!inviter) return
     let party = getUserParty(inviter);
     if (!party) {
@@ -307,6 +309,7 @@ io.on("connection", (socket) => {
         party = parties[inviter];
         broadcastParty(party);
     }
+    console.log(test)
     if (party.members.length >= 5) return;
     if (getUserParty(targetUsername)) return;
     const targetSocketId = userSockets[targetUsername];
@@ -314,6 +317,7 @@ io.on("connection", (socket) => {
     io.to(targetSocketId).emit("partyInvite", {
       from: inviter
     });
+    console.log('Test3')
   });
 
   // =========================
