@@ -1,0 +1,24 @@
+{
+  "name": "code-prodject-1",
+  "version": "1.0.0",
+  "main": "backend/firebase.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"vite --host\" \"node backend/server.cjs\""
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "firebase": "^12.10.0",
+    "mongoose": "^9.3.0",
+    "socket.io": "^4.8.3",
+    "three": "^0.183.2",
+    "vite": "^8.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

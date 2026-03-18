@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Shooter - Home</title>
+    <link rel="stylesheet" href="./../CSS/main.html.css">
+</head>
+<!-- Overlay -->
+<div id="friendsOverlay"></div>
+
+<!-- MAIN INVITE FRIENDS POPUP -->
+<!-- MAIN INVITE FRIENDS POPUP -->
+<div id="friendsPopup">
+
+    <button class="popup-close" id="closeFriends">Close</button>
+
+    <h2>Invite Friends</h2>
+
+    <!-- YOUR FRIENDS SECTION -->
+    <div class="section-title">Your Friends</div>
+    <div id="friendsList" class="scroll-list section"></div>
+
+    <!-- RECEIVED PARTY INVITES SECTION -->
+    <div class="section-title">Received Invites</div>
+    <div id="partyInvitesList" class="scroll-list section"></div>
+
+    <!-- Bottom Buttons -->
+    <div class="friends-bottom-buttons">
+        <button id="friendRequestsBtn" class="orange-btn">
+            Friend Requests
+        </button>
+
+        <button id="addFriendBtn" class="blue-btn">
+            Add Friend
+        </button>
+    </div>
+
+</div>
+
+
+<!-- FRIEND REQUESTS SIDE POPUP (LEFT) -->
+<div id="requestsPopup" class="side-popup left-popup">
+
+    <button class="popup-close" id="closeRequests">Close</button>
+
+    <h3>Friend Requests</h3>
+
+    <div id="requestsList" class="scroll-list"></div>
+
+</div>
+
+
+<!-- ADD FRIEND SIDE POPUP (RIGHT) -->
+<div id="addFriendPopup" class="side-popup right-popup">
+
+    <button class="popup-close" id="closeAddFriend">Close</button>
+
+    <h3>Add Friend</h3>
+
+    <input
+        type="text"
+        id="searchUsername"
+        class="search-input"
+        placeholder="Search username..."
+    >
+
+    <div id="searchResults" class="scroll-list"></div>
+
+</div>
+<div id="loadoutOverlay"></div>
+<div id="loadoutPopup">
+
+    <button id="closeLoadout">Close</button>
+
+    <h2>Loadout</h2>
+
+    <div class="loadout-container">
+
+        <button class="loadout-option" data-loadout="assault">
+            Assault
+        </button>
+
+        <button class="loadout-option" data-loadout="sniper">
+            Sniper
+        </button>
+
+        <button class="loadout-option" data-loadout="shotgun">
+            Shotgun
+        </button>
+
+        <button class="loadout-option" data-loadout="smg">
+            SMG
+        </button>
+
+    </div>
+
+</div>
+<div id="settingsOverlay"></div>
+<div id="manageAccountPopup" class="side-popup right-popup">
+
+    <button class="closeManageAccountPopup" id="closeManageAccountPopup">Close</button>
+
+    <h3>Account Management</h3>
+
+    <div id="manage" class="scroll-list">
+        <div id="changeUsername">
+            <div id="usernameText">Change Username</div>
+            <input type="text" id="changeUsernameInput" placeholder="New Username">
+            <button id="confirmUsernameChange">Confirm</button>
+            <div id="usernameChangeErrorText"></div>
+        </div>
+        <div id="changePassword">
+            <div id="passwordText">Change Password</div>
+            <input type="password" id="changePasswordInputOld" placeholder="Old Password">
+            <input type="password" id="changePasswordInput" placeholder="New Password">
+            <button id="confirmPasswordChange">Confirm</button>
+            <div id="PpasswordChangeErrorText"></div>
+        </div>
+        <div id="deleteAccount">
+            <div id="deleteAccountText">To Delete Your Account Enter The Verify Code And Your Password</div>
+            <div id="deleteAccountText2">Verify Code: </div>
+            <input type="text" id="deleteVerification" placeholder="Verify...">
+            <input type="password" id="passwordDelete" placeholder="Password">
+            <button id="confirmDeleteAccount">Confirm</button>
+            <div id="deleteAccountErrorText"></div>
+        </div>
+    </div>
+
+</div>
+<div id="settingsPopup">
+    <h2>Settings</h2>
+    <div class="setting">
+        <label for="sensitivitySlider">
+            Sensitivity: <span id="sensitivityValue">1.00</span>
+        </label>
+
+        <input 
+            type="range" 
+            id="sensitivitySlider"
+            min="0.1"
+            max="3"
+            step="0.01"
+            value="1"
+        >
+    </div>
+    <button id="manageAccountBtn">Account</button>
+    <button id="logoutBtn">Logout</button>
+    <button id="closeSettings">Close</button>
+</div>
+<body>
+
+<div class="top-bar">
+    <div class="profile">
+        <img src="../ASSETS/IMAGES/PROFILE/default.png" alt="Profile" class="profile-pic">
+        <span id="usernameDisplay" class="username">Username</span>
+    </div>
+    <div class="level-xp">
+        <div class="xp-container">
+            <div class="xp-bar" id="xpBar"></div>
+        </div>
+        <span id="levelDisplay" class="level">Lvl 1</span>
+    </div>
+</div>
+
+<div id="partyContainer">
+
+    <div class="party-header">
+        <span id="partyTitle">Party 1/5</span>
+    </div>
+
+    <div id="partySlots">
+
+        <div class="party-slot" data-slot="0"></div>
+        <div class="party-slot" data-slot="1"></div>
+        <div class="party-slot" data-slot="2"></div>
+        <div class="party-slot" data-slot="3"></div>
+        <div class="party-slot" data-slot="4"></div>
+        <button id="leave-party">Leave Party</button>
+
+    </div>
+
+</div>
+<div class="right-buttons">
+    <button id="playBtn">Play</button>
+    <button id="inviteBtn">Invite Friends</button>
+    <button id="loadoutBtn">Loadout</button>
+    <button id="settingsBtn">Settings</button>
+</div>
+
+<div class="bottom-bar">
+    <span class="version">v1.0.0</span>
+    <span class="userid" id="userUID">UID:</span>
+</div>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script type="module" src="./../JAVASCRIPT/main.js"></script>
+</body>
+</html>
