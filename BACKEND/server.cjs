@@ -320,6 +320,7 @@ io.on("connection", (socket) => {
   // ACCEPT PARTY INVITE
   // =========================
   socket.on("acceptPartyInvite", (leaderUsername) => {
+    console.log('test')
     const username = socket.username;
     console.log('test')
     if (!username) return;
