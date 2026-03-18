@@ -6,6 +6,15 @@ window.onerror = function (msg, url, line, col, error) {
     console.log(`Error: `, msg, url, line, col, error)
 }
 
+const socket = await io("https://shooter-game-web-1.onrender.com");
+
+socket.on("connect", () => {
+    console.log("SOCKET CONNECTED: ", socket.id)
+})
+socket.on("connect_error", (err) => {
+    console.log('CONNECT_ERROR:', err)
+})
+
 // ==========================
 // FIREBASE/UI
 // ==========================
@@ -28,7 +37,6 @@ auth.onAuthStateChanged(async (user) => {
 
     currentUser = user;
     username = user.displayName;
-    console.log(auth.currentUser)
 
     document.getElementById("usernameDisplay").textContent = username;
 
@@ -38,7 +46,8 @@ auth.onAuthStateChanged(async (user) => {
     loadLoadout();
     await loadFriends();
     await loadPartyInvites();
-    socket.emit("register", auth.currentUser.uid);
+    await socket.emit("register", auth.currentUser.uid);
+    console.log('Registered: ', auth.currentUser.uid)
 });
 
 async function initialiseUserData(){
@@ -278,7 +287,6 @@ confirmDeleteAccount.onclick = async () => {
         }
     }
     const uid = auth.currentUser.uid;
-    console.log(uid)
     const snap = await getDocs(collection(db, "users"));
     snap.forEach(async (userDoc) => {
         const userRef = doc(db, "users", userDoc.id);
@@ -368,7 +376,21 @@ closeAddFriend.onclick = () => {
     addFriendPopup.classList.remove("active");
 };
 
-const socket = io("https://shooter-game-web.onrender.com");
+function updateButtons() {
+    const isLeader = currentLeader === auth.currentUser.uid;
+    const isSolo = currentParty.length <= 1;
+
+    if(isSolo || isLeader) {
+        inviteBtn.disabled = false;
+        inviteBtn.style.opacity = "1";
+        inviteBtn.style.cursor = "pointer";
+    }
+    else {
+        inviteBtn.disabled = true;
+        inviteBtn.style.opacity = "0.5";
+        inviteBtn.style.cursor = "not-allowed";
+    }
+}
 
 async function loadPartyInvites(){
     partyInvitesList.innerHTML="";
@@ -399,7 +421,6 @@ async function loadPartyInvites(){
         </div>
         `;
         div.querySelector(".join-btn").onclick = async ()=>{
-            console.log(inviter)
             socket.emit("acceptPartyInvite", inviter);
             const userRef = doc(db,"users",currentUser.uid);
             const snap = await getDoc(userRef);
@@ -426,7 +447,6 @@ async function loadPartyInvites(){
 }
 
 async function removeFriend(friend) {
-    console.log(friend)
     const docRef = doc(db, "users", auth.currentUser.uid)
     const docSnap = await getDoc(docRef)
     const friendRef = doc(db, "users", friend)
@@ -451,13 +471,13 @@ async function removeFriend(friend) {
 }
 
 socket.on("partyInvite", async (data)=>{
-    console.log(data)
     const inviter = data.from;
-    const userRef = doc(db,"users", currentUser.uid);
+    console.log('invite ', data.from, '....', auth.currentUser.uid)
+    const userRef = doc(db,"users", auth.currentUser.uid);
     const snap = await getDoc(userRef);
     let userData = snap.data();
     if(!userData.partyInvites.includes(inviter)){
-        userData.partyInvites.push(snap.id);
+        userData.partyInvites.push(inviter);
         await updateDoc(userRef,{
             partyInvites:userData.partyInvites
         });
@@ -469,7 +489,6 @@ async function loadFriends(){
     friendsList.innerHTML="";
     const snap = await getDoc(doc(db, "users", auth.currentUser.uid));
     const friends = snap.data().friends || [];
-    console.log(friends)
     if(friends.length === 0){
         friendsList.innerHTML=`
         <p style="color:#aaa;font-weight:bold;text-align:center;">
@@ -479,11 +498,11 @@ async function loadFriends(){
         return;
     }
     friends.forEach(async (friend) =>{
-        console.log(auth.currentUser.id)
-        console.log(friend)
+        console.log(auth.currentUser.uid, '....', friend)
         const docRef = doc(db, "users", friend)
         const docSnap = await getDoc(docRef)
         const friendUsername = docSnap.data().username;
+        console.log(auth.currentUser.displayName, '....', friendUsername)
         const div = document.createElement("div");
         div.classList.add("friend-item");
         div.innerHTML=`
@@ -497,7 +516,6 @@ async function loadFriends(){
         </div>
         `;
         div.querySelector(".invite-btn").onclick=()=>{
-            console.log('test')
             socket.emit("inviteToParty", friend);
         };
         div.querySelector(".remove-btn").onclick=()=>{
@@ -582,6 +600,7 @@ async function updatePartyDisplay() {
     partySlots.forEach(slot => {
         slot.innerHTML="";
      });
+     updateButtons()
 
      for(let i=0; i<5; i++) {
         const slot = partySlots[i];
